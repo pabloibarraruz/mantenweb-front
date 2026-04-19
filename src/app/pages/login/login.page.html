@@ -1,0 +1,30 @@
+<div class="wrap">
+  <div class="card">
+    <h1>Iniciar sesión</h1>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        Correo
+        <input type="email" formControlName="correo" placeholder="tu@email.com" />
+      </label>
+      <div class="err" *ngIf="correoCtrl?.touched && correoCtrl?.invalid">
+        Ingresa un correo válido.
+      </div>
+
+      <label>
+        Contraseña
+        <input type="password" formControlName="contrasena" placeholder="********" />
+      </label>
+      <div class="err" *ngIf="contrasenaCtrl?.touched && contrasenaCtrl?.invalid">
+        Ingresa tu contraseña.
+      </div>
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Ingresando...' : 'Entrar' }}
+      </button>
+
+      <div class="err" *ngIf="errorMsg">{{ errorMsg }}</div>
+    </form>
+  </div>
+</div>
+

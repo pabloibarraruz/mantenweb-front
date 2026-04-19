@@ -1,0 +1,32 @@
+.page {
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.error {
+  color: #b00020;
+  margin: 10px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+thead th {
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+}
+
+tbody td {
+  border-bottom: 1px solid #eee;
+  padding: 8px;
+}

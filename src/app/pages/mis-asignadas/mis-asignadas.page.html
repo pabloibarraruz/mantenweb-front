@@ -1,0 +1,34 @@
+<app-nav></app-nav>
+
+<div class="page">
+  <div class="header">
+    <h1>Mis órdenes asignadas</h1>
+    <button type="button" (click)="load()" [disabled]="loading">Refrescar</button>
+  </div>
+
+  <div *ngIf="loading">Cargando...</div>
+  <div class="error" *ngIf="errorMsg">{{ errorMsg }}</div>
+
+  <table *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Código</th>
+        <th>Título</th>
+        <th>Estado</th>
+        <th>Prioridad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let it of items">
+        <td>{{ it.id }}</td>
+        <td>{{ it.codigoOt }}</td>
+        <td>{{ it.titulo }}</td>
+        <td>{{ it.idEstado }}</td>
+        <td>{{ it.idPrioridad }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && items.length === 0">No hay registros para mostrar.</div>
+</div>

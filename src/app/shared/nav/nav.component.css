@@ -1,0 +1,28 @@
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.brand {
+  font-weight: 700;
+}
+
+.spacer {
+  flex: 1;
+}
+
+a {
+  text-decoration: none;
+  color: #0b57d0;
+}
+
+a.active {
+  font-weight: 600;
+}
+
+button {
+  padding: 6px 10px;
+}
