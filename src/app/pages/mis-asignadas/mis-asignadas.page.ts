@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { OrdenTrabajo, OrdenTrabajoControllerService } from '../../api';
+import { OrdenTrabajo } from '../../api/model/models';
+import { OrdenTrabajoApiService } from '../../services';
 import { NavComponent } from '../../shared/nav/nav.component';
 
 @Component({
@@ -16,7 +17,7 @@ export class MisAsignadasPageComponent implements OnInit {
   loading = false;
   errorMsg: string | null = null;
 
-  constructor(private api: OrdenTrabajoControllerService) {}
+  constructor(private api: OrdenTrabajoApiService) {}
 
   ngOnInit(): void {
     this.load();

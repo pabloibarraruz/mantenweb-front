@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { AuthControllerService, AuthLoginRequestDto } from '../../api';
+import { AuthLoginRequestDto } from '../../api/model/models';
 import { AuthService } from '../../core/auth/auth.service';
+import { AuthApiService } from '../../services';
 
 @Component({
   selector: 'app-login-page',
@@ -21,7 +23,7 @@ export class LoginPageComponent {
 
   constructor(
     private fb: FormBuilder,
-    private api: AuthControllerService,
+    private api: AuthApiService,
     private auth: AuthService,
     private router: Router
   ) {
@@ -48,9 +50,10 @@ export class LoginPageComponent {
       return;
     }
 
+    const formValue = this.form.getRawValue();
     const payload: AuthLoginRequestDto = {
-      correo: this.form.value.correo!,
-      contrasena: this.form.value.contrasena!
+      correo: (formValue.correo ?? '').trim().toLowerCase(),
+      contrasena: formValue.contrasena ?? ''
     };
 
     this.loading = true;
@@ -60,11 +63,34 @@ export class LoginPageComponent {
         this.loading = false;
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         this.loading = false;
-        this.errorMsg = 'No se pudo iniciar sesión. Verifica correo y contraseña.';
+        this.errorMsg = this.resolveErrorMessage(err);
         console.error(err);
       }
     });
+  }
+
+  private resolveErrorMessage(err: HttpErrorResponse): string {
+    const backendMessage =
+      typeof err.error?.message === 'string' ? err.error.message : null;
+
+    if (backendMessage) {
+      return backendMessage;
+    }
+
+    if (err.status === 0) {
+      return 'No se pudo conectar con el backend. Revisa que el servidor y el proxy estén activos.';
+    }
+
+    if (err.status === 401) {
+      return 'Credenciales inválidas.';
+    }
+
+    if (err.status === 403) {
+      return 'Tu usuario no tiene permiso para ingresar.';
+    }
+
+    return 'No se pudo iniciar sesión. Inténtalo nuevamente.';
   }
 }

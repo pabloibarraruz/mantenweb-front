@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { HealthControllerService } from '../../api';
+import { HealthApiService } from '../../services';
 import { NavComponent } from '../../shared/nav/nav.component';
 
 @Component({
@@ -15,11 +15,11 @@ export class DashboardPageComponent implements OnInit {
   status: any = null;
   loading = false;
 
-  constructor(private healthApi: HealthControllerService) {}
+  constructor(private healthApi: HealthApiService) {}
 
   ngOnInit(): void {
     this.loading = true;
-    this.healthApi.health().subscribe({
+    this.healthApi.obtenerEstado().subscribe({
       next: (res) => {
         this.status = res;
         this.loading = false;
