@@ -1,19 +1,20 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/auth.guard';
+import { roleGuard } from './core/auth/role.guard';
 
 import { LoginPageComponent } from './pages/login/login.page';
-import { DashboardPageComponent } from './pages/dashboard/dashboard.page';
-import { OrdenesTrabajoPageComponent } from './pages/ordenes-trabajo/ordenes-trabajo.page';
-import { MisAsignadasPageComponent } from './pages/mis-asignadas/mis-asignadas.page';
+import { HomeRedirectPageComponent } from './pages/home-redirect/home-redirect.page';
+import { JefaturaPageComponent } from './pages/jefatura/jefatura.page';
+import { TecnicoPageComponent } from './pages/tecnico/tecnico.page';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginPageComponent },
 
-  { path: 'dashboard', component: DashboardPageComponent, canActivate: [authGuard] },
-  { path: 'ordenes-trabajo', component: OrdenesTrabajoPageComponent, canActivate: [authGuard] },
-  { path: 'mis-asignadas', component: MisAsignadasPageComponent, canActivate: [authGuard] },
+  { path: 'dashboard', component: HomeRedirectPageComponent, canActivate: [authGuard] },
+  { path: 'jefatura', component: JefaturaPageComponent, canActivate: [authGuard, roleGuard], data: { roles: ['ADMIN'] } },
+  { path: 'tecnico', component: TecnicoPageComponent, canActivate: [authGuard, roleGuard], data: { roles: ['TECNICO'] } },
 
   { path: '**', redirectTo: 'login' }
 ];

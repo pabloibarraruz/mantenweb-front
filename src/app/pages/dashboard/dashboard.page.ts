@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { HealthApiService } from '../../services';
@@ -12,22 +12,22 @@ import { NavComponent } from '../../shared/nav/nav.component';
   styleUrl: './dashboard.page.css'
 })
 export class DashboardPageComponent implements OnInit {
-  status: any = null;
-  loading = false;
+  readonly status = signal<Record<string, unknown> | null>(null);
+  readonly loading = signal(false);
 
   constructor(private healthApi: HealthApiService) {}
 
   ngOnInit(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.healthApi.obtenerEstado().subscribe({
       next: (res) => {
-        this.status = res;
-        this.loading = false;
+        this.status.set(res);
+        this.loading.set(false);
       },
       error: (err) => {
         console.error(err);
-        this.status = { ok: false };
-        this.loading = false;
+        this.status.set({ ok: false });
+        this.loading.set(false);
       }
     });
   }

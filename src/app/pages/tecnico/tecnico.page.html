@@ -1,0 +1,122 @@
+<app-nav></app-nav>
+
+<div class="page">
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Técnico</span>
+      <h1>Mis trabajos asignados</h1>
+      <p>Revisa tus órdenes, describe lo realizado y marca la atención como finalizada.</p>
+    </div>
+
+    <div class="hero-stats">
+      <article>
+        <strong>{{ resumen().total }}</strong>
+        <span>Total asignadas</span>
+      </article>
+      <article>
+        <strong>{{ resumen().pendientes }}</strong>
+        <span>Pendientes</span>
+      </article>
+      <article>
+        <strong>{{ resumen().finalizadas }}</strong>
+        <span>Finalizadas</span>
+      </article>
+      <article>
+        <strong>{{ resumen().urgentes }}</strong>
+        <span>Urgentes</span>
+      </article>
+    </div>
+  </section>
+
+  <div class="messages">
+    <div class="banner error" *ngIf="errorMsg()">{{ errorMsg() }}</div>
+    <div class="banner success" *ngIf="successMsg()">{{ successMsg() }}</div>
+  </div>
+
+  <div class="toolbar">
+    <button type="button" class="secondary" (click)="load()" [disabled]="loading()">
+      {{ loading() ? 'Actualizando...' : 'Actualizar listado' }}
+    </button>
+  </div>
+
+  <div *ngIf="loading()" class="empty-state">
+    <strong>Cargando trabajos...</strong>
+    <span>Estamos revisando tus órdenes asignadas.</span>
+  </div>
+
+  <div class="list" *ngIf="!loading()">
+    <article class="job-card" *ngFor="let item of items(); trackBy: trackById">
+      <div class="job-header">
+        <div>
+          <div class="code">{{ item.codigoOt }}</div>
+          <h2>{{ item.titulo }}</h2>
+        </div>
+        <span [class]="getEstadoClass(item)">
+          {{ item.estadoNombre || 'Sin estado' }}
+        </span>
+      </div>
+
+      <dl class="details">
+        <div>
+          <dt>Solicitante</dt>
+          <dd>{{ item.nombreSolicitante || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Servicio</dt>
+          <dd>{{ item.servicio || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Piso</dt>
+          <dd>{{ item.piso || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Especialidad</dt>
+          <dd>{{ item.especialidadNombre || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Tipo</dt>
+          <dd><span [class]="getPrioridadClass(item)">{{ item.prioridadNombre || '-' }}</span></dd>
+        </div>
+        <div>
+          <dt>Solicitada</dt>
+          <dd>{{ formatFechaHora(item.fechaApertura) }}</dd>
+        </div>
+        <div>
+          <dt>Finalizada</dt>
+          <dd>{{ formatFechaHora(item.fechaCierre) }}</dd>
+        </div>
+      </dl>
+
+      <div class="block">
+        <strong>Motivo de solicitud</strong>
+        <p>{{ item.descripcion }}</p>
+      </div>
+
+      <div class="block" *ngIf="item.detalleTrabajoRealizado">
+        <strong>Trabajo realizado</strong>
+        <p>{{ item.detalleTrabajoRealizado }}</p>
+      </div>
+
+      <div class="block" *ngIf="!isFinalizada(item)">
+        <label>
+          <span>Describe lo que realizaste</span>
+          <textarea
+            rows="4"
+            [ngModel]="drafts()[item.id] || ''"
+            (ngModelChange)="updateDraft(item.id, $event)"
+            placeholder="Ej: Se reemplazó el enchufe y se verificó voltaje."
+          ></textarea>
+        </label>
+
+        <button type="button" (click)="finalize(item)" [disabled]="savingId() === item.id">
+          {{ savingId() === item.id ? 'Finalizando...' : 'Marcar como finalizada' }}
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <div *ngIf="!loading() && items().length === 0" class="empty-state">
+    <strong>No tienes órdenes asignadas en este momento.</strong>
+    <span>Cuando jefatura te delegue una OT, aparecerá aquí automáticamente.</span>
+  </div>
+</div>

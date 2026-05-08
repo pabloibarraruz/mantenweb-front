@@ -3,6 +3,14 @@ import { Injectable } from '@angular/core';
 const TOKEN_KEY = 'auth_token';
 const AUTH_RESPONSE_KEY = 'auth_response';
 
+interface StoredAuthResponse {
+  token?: string;
+  idUsuario?: number;
+  correo?: string;
+  nombreCompleto?: string;
+  rol?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   getToken(): string | null {
@@ -11,6 +19,45 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  getAuthResponse(): StoredAuthResponse | null {
+    const raw = localStorage.getItem(AUTH_RESPONSE_KEY);
+    if (!raw) return null;
+
+    try {
+      return JSON.parse(raw) as StoredAuthResponse;
+    } catch {
+      return null;
+    }
+  }
+
+  getRole(): string | null {
+    const role = this.getAuthResponse()?.rol;
+    return typeof role === 'string' ? role.trim().toUpperCase() : null;
+  }
+
+  getUserId(): number | null {
+    const id = this.getAuthResponse()?.idUsuario;
+    return typeof id === 'number' ? id : null;
+  }
+
+  getDisplayName(): string {
+    return this.getAuthResponse()?.nombreCompleto?.trim() || '';
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMIN';
+  }
+
+  isTecnico(): boolean {
+    return this.getRole() === 'TECNICO';
+  }
+
+  getHomeUrl(): string {
+    if (this.isAdmin()) return '/jefatura';
+    if (this.isTecnico()) return '/tecnico';
+    return '/login';
   }
 
   saveAuthResponse(response: unknown): void {

@@ -1,1 +1,150 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --font-body: "Bahnschrift", "Segoe UI", sans-serif;
+  --font-heading: "Aptos Display", "Bahnschrift SemiBold", "Segoe UI Semibold", sans-serif;
+  --font-mono: "Consolas", "Cascadia Mono", monospace;
+  --bg: #f3f6fb;
+  --bg-soft: #fbfcfe;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-strong: #ffffff;
+  --surface-border: #d7dfec;
+  --surface-border-strong: #bcc9dc;
+  --text: #142033;
+  --text-muted: #5f6f85;
+  --primary: #0f3d91;
+  --primary-strong: #0a2d6f;
+  --primary-soft: #dbe8ff;
+  --success: #16714f;
+  --success-soft: #def5ea;
+  --warning: #8a5a00;
+  --warning-soft: #fff0ca;
+  --danger: #b42318;
+  --danger-soft: #fde7e4;
+  --shadow-lg: 0 22px 50px rgba(16, 33, 67, 0.12);
+  --shadow-md: 0 14px 34px rgba(18, 34, 63, 0.08);
+  --radius-xl: 22px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+  background:
+    radial-gradient(circle at top left, rgba(15, 61, 145, 0.08), transparent 28%),
+    linear-gradient(180deg, #f7f9fd 0%, #eef3fb 100%);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--text);
+  font-family: var(--font-body);
+  background: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  color: #0e1830;
+}
+
+p {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+input,
+select,
+textarea,
+a {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(15, 61, 145, 0.18);
+  outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  background: var(--surface-strong);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #8b98ac;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--surface-border-strong);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #7ea4eb;
+  box-shadow:
+    0 0 0 4px rgba(15, 61, 145, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  outline: none;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary) 0%, #184eb5 100%);
+  color: #fff;
+  box-shadow: 0 12px 22px rgba(15, 61, 145, 0.2);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--primary-strong) 0%, #123f95 100%);
+}
+
+button:disabled {
+  opacity: 0.72;
+  cursor: default;
+  box-shadow: none;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(15, 61, 145, 0.16);
+}

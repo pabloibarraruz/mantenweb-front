@@ -1,0 +1,212 @@
+<app-nav></app-nav>
+
+<div class="page">
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Jefatura</span>
+      <h1>Panel de jefatura</h1>
+      <p>Crea la orden, asígnala al técnico y sigue su estado sin salir del sistema.</p>
+    </div>
+
+    <div class="hero-stats">
+      <article>
+        <strong>{{ resumen().total }}</strong>
+        <span>Órdenes registradas</span>
+      </article>
+      <article>
+        <strong>{{ resumen().enProceso }}</strong>
+        <span>En proceso</span>
+      </article>
+      <article>
+        <strong>{{ resumen().finalizadas }}</strong>
+        <span>Finalizadas</span>
+      </article>
+      <article>
+        <strong>{{ resumen().urgentes }}</strong>
+        <span>Urgentes</span>
+      </article>
+    </div>
+  </section>
+
+  <div class="banner error" *ngIf="errorMsg()">{{ errorMsg() }}</div>
+  <div class="banner success" *ngIf="successMsg()">{{ successMsg() }}</div>
+
+  <section class="layout">
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <h2>Nueva orden de trabajo</h2>
+          <p>Completa lo mínimo necesario para delegar bien la atención.</p>
+        </div>
+        <span class="muted" *ngIf="loadingCatalogos()">Cargando catálogos...</span>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>
+          <span>Problema reportado</span>
+          <input type="text" formControlName="titulo" placeholder="Ej: Enchufe dañado" />
+        </label>
+
+        <label>
+          <span>Motivo de solicitud</span>
+          <textarea rows="4" formControlName="descripcion" placeholder="Describe lo que pasó"></textarea>
+        </label>
+
+        <div class="grid two">
+          <label>
+            <span>Piso</span>
+            <input type="text" formControlName="piso" placeholder="Ej: Piso 2" />
+          </label>
+
+          <label>
+            <span>Servicio</span>
+            <input type="text" formControlName="servicio" placeholder="Ej: Laboratorio" />
+          </label>
+        </div>
+
+        <label>
+          <span>Nombre de quien solicita</span>
+          <input type="text" formControlName="nombreSolicitante" placeholder="Nombre del solicitante" />
+        </label>
+
+        <div class="grid two">
+          <label>
+            <span>Especialidad técnica</span>
+            <select formControlName="idEspecialidad">
+              <option [ngValue]="null">Selecciona una especialidad</option>
+              <option *ngFor="let item of especialidades()" [ngValue]="item.idEspecialidad">
+                {{ item.nombreEspecialidad }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            <span>Tipo de solicitud</span>
+            <select formControlName="idPrioridad">
+              <option [ngValue]="null">Selecciona urgencia</option>
+              <option *ngFor="let item of prioridades()" [ngValue]="item.idPrioridad">
+                {{ item.nombrePrioridad }}
+              </option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span>Técnico asignado</span>
+          <select formControlName="idUsuarioAsignado">
+            <option [ngValue]="null">Selecciona un técnico</option>
+            <option *ngFor="let tecnico of tecnicos()" [ngValue]="tecnico.id">
+              {{ tecnico.nombreCompleto }}
+            </option>
+          </select>
+        </label>
+
+        <div class="actions">
+          <button type="submit" [disabled]="saving() || loadingCatalogos()">
+            {{ saving() ? 'Guardando...' : 'Crear y asignar OT' }}
+          </button>
+        </div>
+      </form>
+    </article>
+
+    <article class="card wide">
+      <div class="card-head">
+        <div>
+          <h2>Seguimiento de órdenes</h2>
+          <p>Visualiza el técnico asignado, urgencia y estado actual de cada OT.</p>
+        </div>
+        <button type="button" class="secondary" (click)="loadOrdenes()" [disabled]="loadingOrdenes()">
+          {{ loadingOrdenes() ? 'Actualizando...' : 'Actualizar' }}
+        </button>
+      </div>
+
+      <div *ngIf="loadingOrdenes()" class="empty-state">
+        <strong>Cargando órdenes...</strong>
+        <span>Estamos trayendo el estado más reciente del equipo.</span>
+      </div>
+
+      <div class="filters" *ngIf="!loadingOrdenes()">
+        <label>
+          <span>Filtrar por especialidad</span>
+          <select [ngModel]="filtroEspecialidad()" (ngModelChange)="setFiltroEspecialidad($event)">
+            <option value="">Todas las especialidades</option>
+            <option *ngFor="let item of especialidades()" [value]="item.idEspecialidad">
+              {{ item.nombreEspecialidad }}
+            </option>
+          </select>
+        </label>
+
+        <label>
+          <span>Filtrar por mes solicitado</span>
+          <select [ngModel]="filtroMes()" (ngModelChange)="setFiltroMes($event)">
+            <option value="">Todos los meses</option>
+            <option *ngFor="let month of mesesDisponibles()" [value]="month.value">
+              {{ month.label }}
+            </option>
+          </select>
+        </label>
+
+        <button type="button" class="ghost" (click)="limpiarFiltros()">Limpiar filtros</button>
+      </div>
+
+      <div class="table-wrap" *ngIf="!loadingOrdenes()">
+        <table>
+          <thead>
+            <tr>
+              <th>OT</th>
+              <th>Problema</th>
+              <th>Solicitante</th>
+              <th>Piso</th>
+              <th>Servicio</th>
+              <th>Especialidad</th>
+              <th>Técnico</th>
+              <th>Estado</th>
+              <th>Tipo</th>
+              <th>Solicitada</th>
+              <th>Finalizada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let orden of ordenesFiltradas(); trackBy: trackById">
+              <td>
+                <div class="ot-code">{{ orden.codigoOt }}</div>
+              </td>
+              <td>
+                <div class="problem">
+                  <strong>{{ orden.titulo }}</strong>
+                  <span>{{ orden.descripcion }}</span>
+                </div>
+              </td>
+              <td>{{ orden.nombreSolicitante || '-' }}</td>
+              <td>{{ orden.piso || '-' }}</td>
+              <td>{{ orden.servicio || '-' }}</td>
+              <td>{{ orden.especialidadNombre || '-' }}</td>
+              <td>{{ orden.tecnicoAsignadoNombre || 'Sin asignar' }}</td>
+              <td>
+                <span [class]="getEstadoClass(orden)">{{ orden.estadoNombre || '-' }}</span>
+              </td>
+              <td>
+                <span [class]="getPrioridadClass(orden)">{{ orden.prioridadNombre || '-' }}</span>
+              </td>
+              <td>
+                <div class="date-cell">
+                  <strong>{{ formatFechaHora(orden.fechaApertura) }}</strong>
+                </div>
+              </td>
+              <td>
+                <div class="date-cell">
+                  <strong>{{ formatFechaHora(orden.fechaCierre) }}</strong>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="!loadingOrdenes() && ordenesFiltradas().length === 0" class="empty-state">
+        <strong>No hay órdenes para los filtros seleccionados.</strong>
+        <span>Ajusta la especialidad o el mes para ver otros resultados.</span>
+      </div>
+    </article>
+  </section>
+</div>

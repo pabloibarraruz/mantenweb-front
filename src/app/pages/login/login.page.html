@@ -1,30 +1,53 @@
 <div class="wrap">
-  <div class="card">
-    <h1>Iniciar sesión</h1>
+  <section class="intro-panel">
+    <span class="eyebrow">Hospital</span>
+    <h1>Mantenweb</h1>
+    <p class="lead">
+      Una entrada única para jefatura y técnicos, con seguimiento claro de cada orden de trabajo.
+    </p>
+
+    <div class="feature-list">
+      <article>
+        <strong>Jefatura</strong>
+        <span>Crea la solicitud, asigna al técnico y revisa el avance.</span>
+      </article>
+      <article>
+        <strong>Técnico</strong>
+        <span>Ve solo tus trabajos, registra lo realizado y cierra la atención.</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <span class="eyebrow soft">Acceso seguro</span>
+      <h2>Iniciar sesión</h2>
+      <p>Ingresa con tu usuario institucional para continuar.</p>
+    </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <label>
-        Correo
-        <input type="email" formControlName="correo" placeholder="tu@email.com" />
+        <span>Correo</span>
+        <input type="email" formControlName="correo" placeholder="nombre@hospital.cl" />
       </label>
       <div class="err" *ngIf="correoCtrl?.touched && correoCtrl?.invalid">
         Ingresa un correo válido.
       </div>
 
       <label>
-        Contraseña
-        <input type="password" formControlName="contrasena" placeholder="********" />
+        <span>Contraseña</span>
+        <input type="password" formControlName="contrasena" placeholder="Escribe tu contraseña" />
       </label>
       <div class="err" *ngIf="contrasenaCtrl?.touched && contrasenaCtrl?.invalid">
         Ingresa tu contraseña.
       </div>
 
       <button type="submit" [disabled]="loading">
-        {{ loading ? 'Ingresando...' : 'Entrar' }}
+        {{ loading ? 'Ingresando...' : 'Entrar al sistema' }}
       </button>
 
-      <div class="err" *ngIf="errorMsg">{{ errorMsg }}</div>
+      <div class="err banner" *ngIf="errorMsg">{{ errorMsg }}</div>
     </form>
-  </div>
+  </section>
 </div>
 

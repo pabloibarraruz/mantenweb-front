@@ -6,11 +6,11 @@
   <div class="card">
     <h2>Backend</h2>
 
-    <div *ngIf="loading">Consultando estado...</div>
+    <div *ngIf="loading()">Consultando estado...</div>
 
-    <div *ngIf="!loading">
+    <div *ngIf="!loading()">
       <p>Respuesta de /api/health:</p>
-      <pre>{{ status | json }}</pre>
+      <pre>{{ status() | json }}</pre>
     </div>
   </div>
 </div>

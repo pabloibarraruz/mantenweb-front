@@ -1,10 +1,20 @@
 <nav class="nav">
-  <div class="brand">Mantenweb</div>
+  <div class="brand-block">
+    <div class="brand">Mantenweb</div>
+    <div class="brand-subtitle">Gestión interna de mantenimiento</div>
+  </div>
 
-  <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-  <a routerLink="/ordenes-trabajo" routerLinkActive="active">Órdenes de trabajo</a>
-  <a routerLink="/mis-asignadas" routerLinkActive="active">Mis asignadas</a>
+  <div class="nav-links">
+    <a *ngIf="isAdmin()" routerLink="/jefatura" routerLinkActive="active">Panel jefatura</a>
+    <a *ngIf="isTecnico()" routerLink="/tecnico" routerLinkActive="active">Mis trabajos</a>
+  </div>
 
   <span class="spacer"></span>
-  <button type="button" (click)="logout()">Salir</button>
+
+  <div class="user-block" *ngIf="getDisplayName()">
+    <span class="role-chip" *ngIf="getRoleLabel()">{{ getRoleLabel() }}</span>
+    <span class="user">{{ getDisplayName() }}</span>
+  </div>
+
+  <button type="button" class="logout-btn" (click)="logout()">Salir</button>
 </nav>

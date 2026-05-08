@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { OrdenTrabajo } from '../../api/model/models';
+import { OrdenTrabajoItem } from '../../models/orden-trabajo.model';
 import { OrdenTrabajoApiService } from '../../services';
 import { NavComponent } from '../../shared/nav/nav.component';
 
@@ -13,9 +13,9 @@ import { NavComponent } from '../../shared/nav/nav.component';
   styleUrl: './mis-asignadas.page.css'
 })
 export class MisAsignadasPageComponent implements OnInit {
-  items: OrdenTrabajo[] = [];
-  loading = false;
-  errorMsg: string | null = null;
+  readonly items = signal<OrdenTrabajoItem[]>([]);
+  readonly loading = signal(false);
+  readonly errorMsg = signal<string | null>(null);
 
   constructor(private api: OrdenTrabajoApiService) {}
 
@@ -24,17 +24,17 @@ export class MisAsignadasPageComponent implements OnInit {
   }
 
   load(): void {
-    this.errorMsg = null;
-    this.loading = true;
+    this.errorMsg.set(null);
+    this.loading.set(true);
     this.api.listarMisAsignadas().subscribe({
       next: (res) => {
-        this.items = res ?? [];
-        this.loading = false;
+        this.items.set(res ?? []);
+        this.loading.set(false);
       },
       error: (err) => {
         console.error(err);
-        this.errorMsg = 'No se pudieron cargar tus órdenes asignadas.';
-        this.loading = false;
+        this.errorMsg.set('No se pudieron cargar tus órdenes asignadas.');
+        this.loading.set(false);
       }
     });
   }

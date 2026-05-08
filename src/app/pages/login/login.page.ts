@@ -61,7 +61,7 @@ export class LoginPageComponent {
       next: (res) => {
         this.auth.saveAuthResponse(res);
         this.loading = false;
-        this.router.navigate(['/dashboard']);
+        this.router.navigateByUrl(this.auth.getHomeUrl());
       },
       error: (err: HttpErrorResponse) => {
         this.loading = false;

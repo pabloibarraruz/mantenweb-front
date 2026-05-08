@@ -3,13 +3,13 @@
 <div class="page">
   <div class="header">
     <h1>Órdenes de trabajo</h1>
-    <button type="button" (click)="load()" [disabled]="loading">Refrescar</button>
+    <button type="button" (click)="load()" [disabled]="loading()">Refrescar</button>
   </div>
 
-  <div *ngIf="loading">Cargando...</div>
-  <div class="error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div *ngIf="loading()">Cargando...</div>
+  <div class="error" *ngIf="errorMsg()">{{ errorMsg() }}</div>
 
-  <table *ngIf="!loading">
+  <table *ngIf="!loading()">
     <thead>
       <tr>
         <th>ID</th>
@@ -17,22 +17,22 @@
         <th>Título</th>
         <th>Estado</th>
         <th>Prioridad</th>
-        <th>Ubicación</th>
+        <th>Servicio</th>
         <th>Asignado</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let it of items">
+      <tr *ngFor="let it of items()">
         <td>{{ it.id }}</td>
         <td>{{ it.codigoOt }}</td>
         <td>{{ it.titulo }}</td>
-        <td>{{ it.idEstado }}</td>
-        <td>{{ it.idPrioridad }}</td>
-        <td>{{ it.idUbicacion }}</td>
-        <td>{{ it.idUsuarioAsignado }}</td>
+        <td>{{ it.estadoNombre || it.idEstado }}</td>
+        <td>{{ it.prioridadNombre || it.idPrioridad }}</td>
+        <td>{{ it.servicio || '-' }}</td>
+        <td>{{ it.tecnicoAsignadoNombre || it.idUsuarioAsignado || 'Sin asignar' }}</td>
       </tr>
     </tbody>
   </table>
 
-  <div *ngIf="!loading && items.length === 0">No hay registros para mostrar.</div>
+  <div *ngIf="!loading() && items().length === 0">No hay registros para mostrar.</div>
 </div>
