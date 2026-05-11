@@ -56,6 +56,7 @@
           <span>Contraseña</span>
           <input type="password" formControlName="contrasena" placeholder="Escribe tu contraseña" />
         </label>
+        <a class="forgot-link" routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
         <div class="err" *ngIf="contrasenaCtrl?.touched && contrasenaCtrl?.invalid">
           Ingresa tu contraseña.
         </div>

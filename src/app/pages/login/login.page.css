@@ -191,6 +191,19 @@ button {
   font-size: 13px;
 }
 
+.forgot-link {
+  align-self: flex-end;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  color: var(--primary-strong);
+  text-decoration: underline;
+}
+
 .banner {
   margin-top: 8px;
   padding: 12px 14px;
