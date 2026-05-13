@@ -64,7 +64,7 @@ export class AuthService {
     try {
       localStorage.setItem(AUTH_RESPONSE_KEY, JSON.stringify(response));
     } catch {
-      // ignore
+      // Si falla el guardado, igual se intenta rescatar el token.
     }
 
     const token = this.extractToken(response);

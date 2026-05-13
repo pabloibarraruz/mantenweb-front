@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
 
     { provide: HTTP_INTERCEPTORS, useClass: ApiBaseUrlInterceptor, multi: true },
-    // Interceptor: agrega Authorization: Bearer <token> en cada request
+    // Agrega el token a las peticiones cuando hay sesion.
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
 };

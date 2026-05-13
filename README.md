@@ -1,59 +1,50 @@
-# Mantenweb
+# MantenWeb Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+Frontend de MantenWeb, sistema para gestionar ordenes de trabajo de mantenimiento en un entorno hospitalario.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js
+- npm
+- Backend de MantenWeb ejecutandose en `http://localhost:8080`
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Instalacion
 
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Ejecucion local
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+La aplicacion queda disponible en:
 
-To build the project run:
+```text
+http://localhost:4200
+```
+
+El proxy local redirige las llamadas `/api` y `/actuator` hacia el backend.
+
+## Compilacion
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+El resultado se genera en la carpeta `dist/`.
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Pruebas
 
 ```bash
-ng test
+npm test
 ```
 
-## Running end-to-end tests
+## Estructura principal
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `src/app/pages`: pantallas de login, dashboard, jefatura, tecnico y recuperacion de contrasena.
+- `src/app/services`: servicios HTTP usados por las pantallas.
+- `src/app/core/auth`: manejo de sesion, guards e interceptor JWT.
+- `src/environments`: configuracion de ambientes.

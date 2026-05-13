@@ -33,7 +33,6 @@ export class LoginPageComponent {
     });
   }
 
-  // Getters para usar en el HTML (evita TS4111)
   get correoCtrl() {
     return this.form.get('correo');
   }
